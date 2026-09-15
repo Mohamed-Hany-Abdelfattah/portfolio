@@ -40,10 +40,11 @@ portfolio/
 
 ## 📦 Featured Repositories
 
-The portfolio links to four real repositories, each in its own project card:
+The portfolio links to five real repositories, each in its own project card:
 
 | Project | Repository | Stack |
 |---------|-----------|-------|
+| Interactive Excel Sales Dashboard | [Sales-Dashboard-Excel](https://github.com/Mohamed-Hany-Abdelfattah/Sales-Dashboard-Excel) | Excel, SUMPRODUCT, Live Filters, EGP/USD Conversion |
 | E-Commerce Sales Analytics | [E-Commerce-Sales-Analytics](https://github.com/Mohamed-Hany-Abdelfattah/E-Commerce-Sales-Analytics) | Excel, SUMIFS/COUNTIFS, INDEX/MATCH |
 | Retail Sales Performance Dashboard 2025 | [Retail-Sales-Performance-Dashboard](https://github.com/Mohamed-Hany-Abdelfattah/Retail-Sales-Performance-Dashboard) | Excel, SUMIF/SUMPRODUCT, KPI Dashboards |
 | Online Competition & Voting Platform Database | [Competition-Voting-Platform-DB](https://github.com/Mohamed-Hany-Abdelfattah/Competition-Voting-Platform-DB) | SQL Server, T-SQL, ERD |
