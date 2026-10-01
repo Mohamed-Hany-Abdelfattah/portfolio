@@ -627,7 +627,7 @@ ul {
    6. HERO SECTION
    -------------------------------------------------------------------------- */
 .hero-section {
-  padding: 6rem 0 5rem 0;
+  padding: 4.25rem 0 4rem 0;
   min-height: calc(100vh - var(--header-height));
   display: flex;
   align-items: center;
@@ -687,16 +687,80 @@ ul {
 }
 
 .hero-container {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 3.5rem;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
+  gap: 1.9rem;
+}
+
+/* Centered portrait — the first thing on the page */
+.hero-portrait {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  padding: 0.4rem;
+}
+
+.hero-portrait-frame {
+  position: relative;
+  z-index: 1;
+  width: clamp(140px, 15vw, 184px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-input);
+  border: 3px solid var(--border-glass-hover);
+  box-shadow:
+    0 18px 45px -18px var(--accent-glow),
+    0 0 0 6px rgba(56, 189, 248, 0.08);
+}
+
+.hero-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 0.6s ease;
+}
+
+.hero-portrait:hover .hero-portrait-img {
+  transform: scale(1.07);
+}
+
+/* soft pulsing ring behind the portrait */
+.hero-portrait-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(140px, 15vw, 184px);
+  height: clamp(140px, 15vw, 184px);
+  margin: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--tag-border);
+  animation: hero-halo 3.6s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hero-halo {
+  0%   { transform: translate(-50%, -50%) scale(1);    opacity: 0.55; }
+  70%  { transform: translate(-50%, -50%) scale(1.32); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1.32); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-portrait-halo { animation: none; opacity: 0.4; }
 }
 
 .hero-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  max-width: 54rem;
 }
 
 .hero-badge {
@@ -798,7 +862,9 @@ ul {
   color: var(--text-secondary);
   line-height: 1.7;
   margin-bottom: 2rem;
-  max-width: 580px;
+  max-width: 40rem;
+  margin-inline: auto;
+  text-wrap: pretty;
 }
 
 .hero-description strong {
@@ -809,6 +875,7 @@ ul {
 .hero-cta-group {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   margin-bottom: 1.75rem;
   flex-wrap: wrap;
@@ -817,6 +884,7 @@ ul {
 .hero-social-bar {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.85rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
@@ -833,6 +901,7 @@ ul {
 .hero-social-links {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
   flex-wrap: wrap;
 }
@@ -864,6 +933,7 @@ ul {
 .hero-quick-tags {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
   flex-wrap: wrap;
 }
@@ -883,6 +953,8 @@ ul {
   position: relative;
   display: flex;
   justify-content: center;
+  width: 100%;
+  margin-top: 0.75rem;
 }
 
 .hero-visual::before {
@@ -897,8 +969,8 @@ ul {
 
 .hero-dashboard-card {
   width: 100%;
-  max-width: 440px;
-  padding: 1.75rem;
+  max-width: 620px;
+  padding: 1.5rem;
   border-radius: var(--radius-lg);
   position: relative;
 }
@@ -989,7 +1061,7 @@ ul {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  height: 130px;
+  height: 104px;
   gap: 0.75rem;
 }
 
@@ -1225,100 +1297,75 @@ ul {
 }
 
 /* ── Portrait Showcase Card ────────────────────────────────────── */
-@keyframes float-profile {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-10px); }
-}
-
-@keyframes profile-glow-pulse {
-  0%, 100% { box-shadow: 0 0 18px rgba(56, 189, 248, 0.25), 0 12px 40px rgba(0,0,0,0.35); }
-  50%       { box-shadow: 0 0 36px rgba(56, 189, 248, 0.55), 0 18px 50px rgba(0,0,0,0.45); }
-}
-
 .portrait-showcase-card {
-  padding: 1.75rem 1.75rem 1.5rem;
+  padding: 1.75rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 1.25rem;
-  text-align: center;
-}
-
-.portrait-image-wrapper {
-  position: relative;
-  width: 210px;
-  height: 260px;
-  border-radius: 18px;
-  overflow: hidden;
-  border: 2px solid var(--border-glass-hover);
-  animation: float-profile 4s ease-in-out infinite, profile-glow-pulse 4s ease-in-out infinite;
-  flex-shrink: 0;
-}
-
-.portrait-photo {
-  width: 100%;
+  text-align: left;
   height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-  transition: transform 0.5s ease;
 }
 
-.portrait-image-wrapper:hover .portrait-photo {
-  transform: scale(1.05);
-}
-
-.portrait-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 45%,
-    rgba(2, 8, 23, 0.72) 100%
-  );
-  pointer-events: none;
-}
-
-[data-theme="light"] .portrait-overlay {
-  background: linear-gradient(
-    to bottom,
-    transparent 45%,
-    rgba(15, 23, 42, 0.68) 100%
-  );
-}
-
-/* Floating "Open to Opportunities" pill */
-.portrait-floating-tag {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+/* Identity block that replaced the second portrait in the About section */
+.identity-head {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(2, 8, 23, 0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  border-radius: 999px;
-  padding: 4px 12px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #e0f7ff;
-  white-space: nowrap;
-  z-index: 2;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-glass);
 }
 
-/* Bottom info overlay */
-.portrait-details {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0.65rem 0.85rem;
-  z-index: 2;
-  text-align: left;
+.identity-avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 1px solid var(--tag-border);
+  color: var(--accent-primary);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
 }
+
+.identity-text {
+  min-width: 0;
+}
+
+.identity-text .portrait-badge {
+  display: inline-block;
+  margin-bottom: 0.3rem;
+}
+
+.identity-text .portrait-full-name {
+  margin-top: 0.15rem;
+}
+
+.portrait-floating-tag {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-full);
+  background: rgba(16, 185, 129, 0.08);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.24);
+}
+
+/* #10b981 on a near-white card is only ~2.3:1, so darken it for light mode */
+[data-theme="light"] .portrait-floating-tag {
+  color: #047857;
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(4, 120, 87, 0.3);
+}
+
+/* Floating "Open to Opportunities" pill in the About identity card */
 
 .portrait-badge {
   display: inline-block;
@@ -1335,16 +1382,17 @@ ul {
 }
 
 .portrait-name {
-  font-size: 0.95rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   margin: 0 0 2px;
-  line-height: 1.2;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 .portrait-full-name {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.78rem;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -3020,34 +3068,7 @@ ul {
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
   .hero-container {
-    grid-template-columns: 1fr;
-    gap: 3.5rem;
-    text-align: center;
-  }
-
-  .hero-content {
-    align-items: center;
-  }
-
-  .hero-description {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hero-cta-group {
-    justify-content: center;
-  }
-
-  .hero-social-bar {
-    justify-content: center;
-  }
-
-  .hero-social-links {
-    justify-content: center;
-  }
-
-  .hero-quick-tags {
-    justify-content: center;
+    gap: 2rem;
   }
 
   .about-grid {
