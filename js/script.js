@@ -619,22 +619,36 @@ document.addEventListener('DOMContentLoaded', () => {
   let lbShots = [];
   let lbIndex = 0;
   let lastFocusedLightboxTrigger = null;
+  // decoded shots, keyed by src, so stepping back and forth is instant
+  const lbCache = new Map();
+
+  function lbSetLoading(isLoading) {
+    lightboxFigure.classList.toggle('is-loading', isLoading);
+    if (isLoading) {
+      lightboxFigure.setAttribute('aria-busy', 'true');
+    } else {
+      lightboxFigure.removeAttribute('aria-busy');
+    }
+  }
+
+  function lbShow(img) {
+    lbSetLoading(false);
+    lightboxFigure.innerHTML = '';
+    lightboxFigure.appendChild(img);
+  }
+
+  // warm the cache for the neighbouring shot so prev/next feels instant
+  function lbPreload(index) {
+    const next = lbShots[index];
+    if (!next || lbCache.has(next.src)) return;
+    const warm = new Image();
+    warm.addEventListener('load', () => lbCache.set(next.src, warm));
+    warm.src = next.src;
+  }
 
   function renderLightboxShot() {
     if (!lbShots.length) return;
     const shot = lbShots[lbIndex];
-
-    lightboxFigure.innerHTML = '';
-    const img = new Image();
-    img.src = shot.src;
-    img.alt = (lbTitle || shot.caption || 'Project screenshot').trim();
-    img.addEventListener('load', () => {
-      // only swap in if this is still the current shot (guards fast navigation)
-      if (lbShots[lbIndex] !== shot) return;
-      lightboxFigure.innerHTML = '';
-      lightboxFigure.appendChild(img);
-    });
-    img.src = shot.src;
 
     lightboxCaption.textContent = shot.caption || '';
 
@@ -643,6 +657,32 @@ document.addEventListener('DOMContentLoaded', () => {
     lightboxCounter.hidden = !multi;
     lightboxPrev.hidden = !multi;
     lightboxNext.hidden = !multi;
+    if (multi) lbPreload((lbIndex + 1) % lbShots.length);
+
+    // only swap in if this is still the current shot (guards fast navigation)
+    const isCurrent = () => !!(lbShots[lbIndex] && lbShots[lbIndex].src === shot.src);
+
+    const cached = lbCache.get(shot.src);
+    if (cached) {
+      lbShow(cached);
+      return;
+    }
+
+    // show the shimmer rather than an empty frame while the shot downloads
+    lbSetLoading(true);
+    lightboxFigure.innerHTML = '';
+
+    const img = new Image();
+    img.decoding = 'async';
+    img.alt = (lbTitle || shot.caption || 'Project screenshot').trim();
+    img.addEventListener('load', () => {
+      lbCache.set(shot.src, img);
+      if (isCurrent()) lbShow(img);
+    });
+    img.addEventListener('error', () => {
+      if (isCurrent()) lbSetLoading(false);
+    });
+    img.src = shot.src;
   }
 
   let lbTitle = '';
@@ -684,6 +724,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lightbox.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     lightboxFigure.innerHTML = '';
+    lbSetLoading(false);
     if (lastFocusedLightboxTrigger) {
       lastFocusedLightboxTrigger.focus();
       lastFocusedLightboxTrigger = null;

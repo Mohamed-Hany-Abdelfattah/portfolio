@@ -2251,6 +2251,7 @@ ul {
 }
 
 .lightbox-figure {
+  position: relative;
   width: 100%;
   max-height: 62vh;
   display: flex;
@@ -2269,6 +2270,40 @@ ul {
   height: auto;
   object-fit: contain;
   display: block;
+}
+
+/* the frame shimmers instead of going blank while a shot decodes */
+.lightbox-figure.is-loading {
+  min-height: 42vh;
+}
+
+.lightbox-figure.is-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 18%,
+    rgba(65, 208, 255, 0.07) 38%,
+    rgba(65, 208, 255, 0.15) 50%,
+    rgba(65, 208, 255, 0.07) 62%,
+    transparent 82%
+  );
+  background-size: 220% 100%;
+  animation: lightbox-shimmer 1.15s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes lightbox-shimmer {
+  from { background-position: 170% 0; }
+  to   { background-position: -70% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-figure.is-loading::after {
+    animation: none;
+    background: linear-gradient(100deg, transparent 30%, rgba(65, 208, 255, 0.1) 50%, transparent 70%);
+  }
 }
 
 .lightbox-nav {
