@@ -1619,7 +1619,11 @@ ul {
    -------------------------------------------------------------------------- */
 .certs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  /* min(100%, 300px) keeps the track from overflowing very narrow phones */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  /* top-align: the DEPI card has no thumbnail yet, so letting it stretch to
+     the row height would leave a large empty block above its text */
+  align-items: start;
   gap: 1.75rem;
 }
 
@@ -1656,7 +1660,7 @@ ul {
   position: relative;
   display: block;
   width: 100%;
-  padding: 0;
+  padding: 0.55rem;
   margin-bottom: 1.35rem;
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-md);
@@ -1670,8 +1674,11 @@ ul {
 .cert-media-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* contain, not cover: the whole certificate stays readable instead of
+     being cropped to fill the frame */
+  object-fit: contain;
   display: block;
+  border-radius: 11px;
   transition: transform 0.4s ease;
 }
 
@@ -3097,10 +3104,6 @@ ul {
 
   .bars-panel {
     padding: 1.5rem;
-  }
-
-  .certs-grid {
-    grid-template-columns: 1fr;
   }
 
   .services-grid {
