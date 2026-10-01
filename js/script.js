@@ -507,12 +507,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // 8. CERTIFICATE PREVIEW MODAL
   // --------------------------------------------------------------------------
   const certModal = document.getElementById('certModal');
-  const certVerifyLinks = document.querySelectorAll('.cert-verify-link');
   const certFallbackSvg =
     '<svg class="cert-modal-fallback" xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
     '<circle cx="12" cy="8" r="6"></circle>' +
     '<path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>' +
     '</svg>';
+
+  let lastFocusedCertTrigger = null;
+
+  /**
+   * Resolve the certificate metadata from either a title link or a thumbnail
+   * button so both entry points open the same modal.
+   */
+  function resolveCert(trigger) {
+    const card = trigger.closest('.cert-card');
+    if (!card) return null;
+
+    const titleLink = card.querySelector('.cert-title a');
+    const titleEl = card.querySelector('.cert-title');
+    const title = (titleLink || titleEl || trigger).textContent.trim();
+    const issuer = (card.querySelector('.cert-issuer') || {}).textContent || '';
+
+    // the thumbnail button carries the image; the title link carries the verify URL
+    const img = trigger.getAttribute('data-cert-img') ||
+      (titleLink && titleLink.getAttribute('data-cert-img')) ||
+      card.querySelector('.cert-media-img').src;
+    const verify = (titleLink && titleLink.getAttribute('href')) || trigger.getAttribute('href') || '#';
+
+    return { title, issuer: issuer.trim(), img, verify };
+  }
 
   function openCertModal(trigger) {
     if (!certModal) return;
@@ -524,26 +547,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!modalTitle || !modalIssuer || !modalVerify || !modalFigure) return;
 
-    modalTitle.textContent = trigger.textContent.trim();
-    modalIssuer.textContent = (trigger.closest('.cert-card').querySelector('.cert-issuer').textContent || '').trim();
-    modalVerify.href = trigger.getAttribute('href') || '#';
+    const data = resolveCert(trigger);
+    if (!data) return;
+
+    lastFocusedCertTrigger = trigger;
+    modalTitle.textContent = data.title;
+    modalIssuer.textContent = data.issuer;
+    modalVerify.href = data.verify;
 
     modalFigure.innerHTML = certFallbackSvg;
 
-    const imgSrc = trigger.getAttribute('data-cert-img');
-    if (imgSrc) {
+    if (data.img) {
       const img = new Image();
-      img.alt = trigger.textContent.trim();
+      img.alt = data.title + ' certificate';
       img.addEventListener('load', () => {
         modalFigure.innerHTML = '';
         modalFigure.appendChild(img);
       });
-      img.src = imgSrc;
+      img.src = data.img;
     }
 
     certModal.classList.add('open');
     certModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+
+    const closeBtn = certModal.querySelector('.cert-modal-close');
+    if (closeBtn) closeBtn.focus();
   }
 
   function closeCertModal() {
@@ -551,12 +580,17 @@ document.addEventListener('DOMContentLoaded', () => {
     certModal.classList.remove('open');
     certModal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    if (lastFocusedCertTrigger) {
+      lastFocusedCertTrigger.focus();
+      lastFocusedCertTrigger = null;
+    }
   }
 
-  certVerifyLinks.forEach((link) => {
-    link.addEventListener('click', (e) => {
+  // both the thumbnail button and the title link open the modal
+  document.querySelectorAll('.cert-media, .cert-verify-link').forEach((trigger) => {
+    trigger.addEventListener('click', (e) => {
       e.preventDefault();
-      openCertModal(link);
+      openCertModal(trigger);
     });
   });
 
@@ -567,6 +601,120 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && certModal && certModal.classList.contains('open')) {
       closeCertModal();
+    }
+  });
+
+  // --------------------------------------------------------------------------
+  // 9. PROJECT SCREENSHOT LIGHTBOX
+  // --------------------------------------------------------------------------
+  const lightbox = document.getElementById('projectLightbox');
+  const lightboxFigure = document.getElementById('lightboxFigure');
+  const lightboxCaption = document.getElementById('lightboxCaption');
+  const lightboxTitle = document.getElementById('lightboxTitle');
+  const lightboxCounter = document.getElementById('lightboxCounter');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  const lightboxLink = document.getElementById('lightboxLink');
+
+  let lbShots = [];
+  let lbIndex = 0;
+  let lastFocusedLightboxTrigger = null;
+
+  function renderLightboxShot() {
+    if (!lbShots.length) return;
+    const shot = lbShots[lbIndex];
+
+    lightboxFigure.innerHTML = '';
+    const img = new Image();
+    img.src = shot.src;
+    img.alt = (lbTitle || shot.caption || 'Project screenshot').trim();
+    img.addEventListener('load', () => {
+      // only swap in if this is still the current shot (guards fast navigation)
+      if (lbShots[lbIndex] !== shot) return;
+      lightboxFigure.innerHTML = '';
+      lightboxFigure.appendChild(img);
+    });
+    img.src = shot.src;
+
+    lightboxCaption.textContent = shot.caption || '';
+
+    const multi = lbShots.length > 1;
+    lightboxCounter.textContent = multi ? (lbIndex + 1) + ' / ' + lbShots.length : '';
+    lightboxCounter.hidden = !multi;
+    lightboxPrev.hidden = !multi;
+    lightboxNext.hidden = !multi;
+  }
+
+  let lbTitle = '';
+
+  function openLightbox(trigger) {
+    if (!lightbox) return;
+
+    const raw = trigger.getAttribute('data-project-media');
+    if (!raw) return;
+    try {
+      lbShots = JSON.parse(raw);
+    } catch (err) {
+      lbShots = [];
+    }
+    if (!Array.isArray(lbShots) || !lbShots.length) return;
+
+    lbTitle = trigger.getAttribute('data-project-title') || '';
+    lbIndex = 0;
+    lastFocusedLightboxTrigger = trigger;
+
+    lightboxTitle.textContent = lbTitle;
+
+    const repoLink = trigger.closest('.project-card')
+      && trigger.closest('.project-card').querySelector('.project-footer a');
+    lightboxLink.href = repoLink ? repoLink.href : '#';
+
+    renderLightboxShot();
+
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    const closeBtn = lightbox.querySelector('.lightbox-close');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lightboxFigure.innerHTML = '';
+    if (lastFocusedLightboxTrigger) {
+      lastFocusedLightboxTrigger.focus();
+      lastFocusedLightboxTrigger = null;
+    }
+  }
+
+  function stepLightbox(delta) {
+    if (!lbShots.length) return;
+    lbIndex = (lbIndex + delta + lbShots.length) % lbShots.length;
+    renderLightboxShot();
+  }
+
+  document.querySelectorAll('.project-media-btn').forEach((btn) => {
+    btn.addEventListener('click', () => openLightbox(btn));
+  });
+
+  document.querySelectorAll('[data-lightbox-close]').forEach((el) => {
+    el.addEventListener('click', closeLightbox);
+  });
+
+  if (lightboxPrev) lightboxPrev.addEventListener('click', () => stepLightbox(-1));
+  if (lightboxNext) lightboxNext.addEventListener('click', () => stepLightbox(1));
+
+  document.addEventListener('keydown', (event) => {
+    if (!lightbox || !lightbox.classList.contains('open')) return;
+    if (event.key === 'Escape') {
+      closeLightbox();
+    } else if (event.key === 'ArrowLeft') {
+      stepLightbox(-1);
+    } else if (event.key === 'ArrowRight') {
+      stepLightbox(1);
     }
   });
 });
