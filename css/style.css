@@ -2098,6 +2098,44 @@ ul {
   backdrop-filter: blur(6px);
 }
 
+/* --------------------------------------------------------------------------
+   Featured (full-width) project card — wider image, side-by-side layout
+   -------------------------------------------------------------------------- */
+.project-card--wide {
+  grid-column: 1 / -1;
+}
+
+.project-card--wide .project-media-btn {
+  aspect-ratio: 21 / 9;
+}
+
+.project-card--wide .project-media-img {
+  object-position: center center;
+}
+
+.project-card--wide .project-body {
+  padding: 2.25rem 2.5rem;
+}
+
+.project-card--wide .project-title {
+  font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+}
+
+.project-card--wide .project-description {
+  font-size: 1.02rem;
+  max-width: 78ch;
+}
+
+@media (max-width: 640px) {
+  .project-card--wide .project-media-btn {
+    aspect-ratio: 16 / 11;
+  }
+
+  .project-card--wide .project-body {
+    padding: 1.75rem 1.5rem;
+  }
+}
+
 .project-body {
   padding: 2rem;
   display: flex;
