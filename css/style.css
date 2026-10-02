@@ -2107,10 +2107,12 @@ ul {
 
 .project-card--wide .project-media-btn {
   aspect-ratio: 21 / 9;
+  background: var(--bg-input);
 }
 
 .project-card--wide .project-media-img {
   object-position: center center;
+  object-fit: contain;
 }
 
 .project-card--wide .project-body {
