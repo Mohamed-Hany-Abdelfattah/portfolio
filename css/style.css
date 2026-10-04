@@ -706,7 +706,7 @@ ul {
 .hero-portrait-frame {
   position: relative;
   z-index: 1;
-  width: clamp(140px, 15vw, 184px);
+  width: clamp(160px, 18vw, 224px);
   aspect-ratio: 1;
   border-radius: 50%;
   overflow: hidden;
@@ -736,8 +736,8 @@ ul {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: clamp(140px, 15vw, 184px);
-  height: clamp(140px, 15vw, 184px);
+  width: clamp(160px, 18vw, 224px);
+  height: clamp(160px, 18vw, 224px);
   margin: 0;
   border-radius: 50%;
   transform: translate(-50%, -50%);
