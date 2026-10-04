@@ -1,4 +1,4 @@
-﻿# Mohamed Hany — Professional Portfolio
+# Mohamed Hany — Professional Portfolio
 
 [![Live Site](https://img.shields.io/badge/Live%20Site-Visit%20Now-38bdf8?style=for-the-badge&logo=githubpages&logoColor=white)](https://mohamed-hany-abdelfattah.github.io/portfolio/)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
@@ -62,7 +62,7 @@ contact section, and footer.
 | Platform | Profile |
 |----------|---------|
 | Mostaql — مستقل | https://mostaql.com/u/Mohamed_Hany05 |
-| Nafezly — نافعلي | https://nafezly.com/u/Mohamed_Hany05 |
+| Nafezly — نفذذلي | https://nafezly.com/u/Mohamed_Hany05 |
 | Khamsat — خمسات | https://khamsat.com/user/mohamedhanyadelefatt |
 
 ## 🚀 Running Locally
