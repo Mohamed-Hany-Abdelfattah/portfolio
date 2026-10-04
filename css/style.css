@@ -2939,6 +2939,15 @@ ul {
   gap: 0.75rem;
 }
 
+/* Freelance platforms sit in their own group, stacked one per row */
+.social-heading--spaced {
+  margin-top: 1.6rem;
+}
+
+.social-links-grid--stack {
+  grid-template-columns: 1fr;
+}
+
 .social-btn {
   display: flex;
   align-items: center;
@@ -2962,6 +2971,30 @@ ul {
   border-color: var(--accent-primary);
   color: var(--accent-primary);
   transform: translateY(-2px);
+}
+
+/* Brand-tinted variants (freelance platforms).
+   Declared after the base rules and with a doubled class so they outrank
+   both `.social-btn:hover` and `[data-theme="light"] .social-btn`. */
+.social-btn.social-btn--brand {
+  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--brand-color) 38%, transparent);
+  background: color-mix(in srgb, var(--brand-color) 9%, transparent);
+}
+
+.social-btn.social-btn--brand svg {
+  color: var(--brand-color);
+}
+
+.social-btn.social-btn--brand:hover {
+  color: var(--brand-color);
+  border-color: var(--brand-color);
+  background: color-mix(in srgb, var(--brand-color) 16%, transparent);
+  box-shadow: 0 6px 20px -8px var(--brand-color);
+}
+
+[data-theme="light"] .social-btn.social-btn--brand {
+  background: color-mix(in srgb, var(--brand-color) 11%, transparent);
 }
 
 /* Contact Form */
