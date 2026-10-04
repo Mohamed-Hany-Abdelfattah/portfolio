@@ -2644,7 +2644,169 @@ ul {
 }
 
 /* --------------------------------------------------------------------------
-   13. CAREER OBJECTIVE SECTION
+   13. FREELANCE PLATFORMS SECTION
+   -------------------------------------------------------------------------- */
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.75rem;
+}
+
+.platform-card {
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* brand-tinted wash that intensifies on hover */
+.platform-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--brand-color, var(--accent-primary));
+  opacity: 0.65;
+  transition: opacity var(--transition-normal);
+}
+
+.platform-card:hover::before {
+  opacity: 1;
+}
+
+.platform-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+}
+
+.platform-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.7);
+}
+
+.platform-logo.mostaql { background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%); }
+.platform-logo.nafezly { background: linear-gradient(135deg, #7c3aed 0%, #a06cff 100%); }
+.platform-logo.khamsat  { background: linear-gradient(135deg, #ea580c 0%, #f59e0b 100%); }
+
+.platform-head-text {
+  min-width: 0;
+}
+
+.platform-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Arabic platform name kept isolated so RTL text never flips the LTR layout */
+.platform-name-ar {
+  font-family: 'Poppins', 'Noto Kufi Arabic', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  unicode-bidi: isolate;
+}
+
+.platform-type {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
+.platform-desc {
+  font-size: 0.925rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.platform-services {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+  margin-bottom: 1.5rem;
+}
+
+.platform-services li {
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.platform-services li::before {
+  content: '✓';
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.platform-footer {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-glass);
+}
+
+.platform-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Freelancing CTA banner */
+.platforms-cta {
+  margin-top: 1.75rem;
+  padding: 2rem 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  background: var(--accent-soft);
+  border-color: var(--border-glass-hover);
+}
+
+.platforms-cta-text {
+  flex: 1 1 340px;
+}
+
+.platforms-cta-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.platforms-cta-desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   14. CAREER OBJECTIVE SECTION
    -------------------------------------------------------------------------- */
 .objective-card {
   padding: 3.5rem 3rem;
@@ -2719,7 +2881,7 @@ ul {
 }
 
 /* --------------------------------------------------------------------------
-   14. CONTACT SECTION
+   15. CONTACT SECTION
    -------------------------------------------------------------------------- */
 .contact-layout {
   display: grid;
@@ -3233,6 +3395,15 @@ ul {
 
   .objective-pillars {
     grid-template-columns: 1fr;
+  }
+
+  .platforms-cta {
+    padding: 1.75rem 1.5rem;
+  }
+
+  .platforms-cta .btn {
+    width: 100%;
+    justify-content: center;
   }
 
   .hero-badge {

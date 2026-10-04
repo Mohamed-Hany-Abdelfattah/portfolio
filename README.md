@@ -18,7 +18,8 @@ A modern, fully responsive personal portfolio for **Mohamed Hany** — Data Anal
 - **Scroll-spy** active link highlighting in both desktop and mobile nav
 - **Scroll reveal animations** via `IntersectionObserver`
 - **WhatsApp-powered contact form** — submissions open a pre-filled chat
-- **SEO & social-ready** — Open Graph, Twitter Card, canonical URL, custom favicon
+- **SEO & social-ready** — Open Graph, Twitter Card, canonical URL, custom favicon, and `Person` structured data (JSON-LD)
+- **Freelance platforms section** — profile cards linking out to Mostaql, Nafezly, and Khamsat
 - **Accessible** — semantic landmarks, ARIA labels, keyboard-friendly controls
 
 ## 🗂️ Project Structure
@@ -50,6 +51,20 @@ The portfolio links to five real repositories, each in its own project card:
 | Online Competition & Voting Platform Database | [Competition-Voting-Platform-DB](https://github.com/Mohamed-Hany-Abdelfattah/Competition-Voting-Platform-DB) | SQL Server, T-SQL, ERD |
 | AWS Cloud Computing Project | [aws-cloud-computing-project](https://github.com/Mohamed-Hany-Abdelfattah/aws-cloud-computing-project) | AWS: IAM, VPC, EC2, S3, RDS, ALB, Auto Scaling |
 
+## 💼 Freelance Platforms
+
+The portfolio surfaces a dedicated **Freelance Platforms** section linking to three Arabic
+freelance marketplaces, where the owner takes remote data analytics and database projects.
+Each card uses a brand-colored tile (letter mark rendered in CSS — no trademarked logo
+assets are redistributed) and appears alongside the other profile links in the hero,
+contact section, and footer.
+
+| Platform | Profile |
+|----------|---------|
+| Mostaql — مستقل | https://mostaql.com/u/Mohamed_Hany05 |
+| Nafezly — نافعلي | https://nafezly.com/u/Mohamed_Hany05 |
+| Khamsat — خمسات | https://khamsat.com/user/mohamedhanyadelefatt |
+
 ## 🚀 Running Locally
 
 No build step required — open the files directly or serve the folder:
@@ -68,6 +83,9 @@ Then visit `http://localhost:5500`.
 | **Live site** | https://mohamed-hany-abdelfattah.github.io/portfolio/ |
 | **GitHub** | https://github.com/Mohamed-Hany-Abdelfattah |
 | **LinkedIn** | https://www.linkedin.com/in/mohamed-hany-abdelfattah |
+| **Mostaql** | https://mostaql.com/u/Mohamed_Hany05 |
+| **Nafezly** | https://nafezly.com/u/Mohamed_Hany05 |
+| **Khamsat** | https://khamsat.com/user/mohamedhanyadelefatt |
 
 ## 📧 Contact Form
 
