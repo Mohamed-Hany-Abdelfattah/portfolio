@@ -262,46 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // --------------------------------------------------------------------------
   // 6.2 ANIMATED STAT COUNTERS (FIRST IMPRESSION NUMBERS)
   // --------------------------------------------------------------------------
-  const statNumbers = document.querySelectorAll('.stat-num');
-
-  function animateCountUp(el) {
-    const target = parseInt(el.dataset.target, 10) || 0;
-    const duration = 1400;
-    const startTime = performance.now();
-
-    function tick(now) {
-      const progress = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(target * eased);
-      if (progress < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        el.textContent = target;
-      }
-    }
-
-    requestAnimationFrame(tick);
-  }
-
-  if ('IntersectionObserver' in window) {
-    const countersObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animateCountUp(entry.target);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-    statNumbers.forEach((el) => countersObserver.observe(el));
-  } else {
-    statNumbers.forEach((el) => {
-      el.textContent = el.dataset.target || '0';
-    });
-  }
-
   // --------------------------------------------------------------------------
   // 7. CLIENT-SIDE CONTACT FORM VALIDATION & HANDLING
   // --------------------------------------------------------------------------
