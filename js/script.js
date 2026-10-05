@@ -10,6 +10,34 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   // --------------------------------------------------------------------------
+  // 0. IMAGE FORMAT: SERVE THE .webp TWINS, KEEP ORIGINALS AS FALLBACK
+  // --------------------------------------------------------------------------
+  // Static <img> tags pick up their .webp through <picture>. These loaders
+  // build the URL in JS instead, so the same swap happens here - and if a
+  // .webp ever fails to load we quietly retry the original PNG/JPEG.
+  const rasterExt = /\.(?:png|jpe?g)(?=$|[?#])/i;
+
+  const webpSupported = (() => {
+    try {
+      return document.createElement('canvas')
+        .toDataURL('image/webp').indexOf('data:image/webp') === 0;
+    } catch (err) {
+      return false;
+    }
+  })();
+
+  const prefersWebp = (src) => (
+    webpSupported && rasterExt.test(src)
+      ? src.replace(rasterExt, '.webp')
+      : src
+  );
+
+  // stop retrying once the original has already been attempted
+  const retryOriginal = (img, original) => {
+    if (img.getAttribute('src') !== original) img.src = original;
+  };
+
+  // --------------------------------------------------------------------------
   // 1. THEME TOGGLE CONTROLLER (DEFAULT: DARK MODE)
   // --------------------------------------------------------------------------
   const themeToggleBtn = document.getElementById('themeToggle');
@@ -461,7 +489,8 @@ document.addEventListener('DOMContentLoaded', () => {
         modalFigure.innerHTML = '';
         modalFigure.appendChild(img);
       });
-      img.src = data.img;
+      img.addEventListener('error', () => retryOriginal(img, data.img));
+      img.src = prefersWebp(data.img);
     }
 
     certModal.classList.add('open');
@@ -540,7 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!next || lbCache.has(next.src)) return;
     const warm = new Image();
     warm.addEventListener('load', () => lbCache.set(next.src, warm));
-    warm.src = next.src;
+    warm.src = prefersWebp(next.src);
   }
 
   function renderLightboxShot() {
@@ -578,8 +607,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     img.addEventListener('error', () => {
       if (isCurrent()) lbSetLoading(false);
+      retryOriginal(img, shot.src);
     });
-    img.src = shot.src;
+    img.src = prefersWebp(shot.src);
   }
 
   let lbTitle = '';

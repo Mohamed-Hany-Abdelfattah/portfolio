@@ -62,7 +62,7 @@ contact section, and footer.
 | Platform | Profile |
 |----------|---------|
 | Mostaql — مستقل | https://mostaql.com/u/Mohamed_Hany05 |
-| Nafezly — نفذذلي | https://nafezly.com/u/Mohamed_Hany05 |
+| Nafezly — نفذلي | https://nafezly.com/u/Mohamed_Hany05 |
 | Khamsat — خمسات | https://khamsat.com/user/mohamedhanyadelefatt |
 
 ## 🚀 Running Locally

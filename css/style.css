@@ -11,6 +11,11 @@
   margin: 0;
   padding: 0;
 }
+/* <picture> only carries the .webp fallback - keep it out of the box
+   tree so the <img> still sizes straight against its card or frame */
+picture {
+  display: contents;
+}
 
 html {
   scroll-behavior: smooth;
